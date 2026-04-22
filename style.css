@@ -10,22 +10,46 @@ h2 {
   margin-bottom: 10px;
 }
 
-/* IMPORT */
+/* IMPORT BOX */
 .import-box {
+  display: flex;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
-button {
-  padding: 6px 12px;
-  border: none;
-  background: #4CAF50;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
+/* Ẩn input file gốc */
+#fileInput {
+  display: none;
 }
 
-button:hover {
-  background: #45a049;
+/* Button style chung */
+.btn {
+  padding: 8px 16px;
+  border-radius: 999px; /* 🔥 bo tròn hoàn toàn */
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+/* Choose file */
+.btn-file {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.btn-file:hover {
+  background: #c7d2fe;
+}
+
+/* Import */
+.btn-import {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-import:hover {
+  background: #43a047;
 }
 
 /* DASHBOARD */

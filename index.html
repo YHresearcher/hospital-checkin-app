@@ -2,18 +2,19 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Hospital Check-in</title>
+  <title>Check-in System</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Hospital Check-in System</h2>
+<h2>Hospital Check-in</h2>
+
 <div id="dashboard">
-  <h3>Dashboard</h3>
-  <p>Tổng khách: <span id="total"></span></p>
-  <p>Đã hoàn tất: <span id="done"></span></p>
-  <p>Chưa hoàn tất: <span id="pending"></span></p>
+  <p>Total: <span id="total"></span></p>
+  <p>Done: <span id="done"></span></p>
+  <p>Pending: <span id="pending"></span></p>
 </div>
+
 <table id="customerTable">
   <thead>
     <tr>
@@ -24,6 +25,7 @@
       <th>Scan</th>
       <th>Checkout</th>
       <th>Signed</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody></tbody>

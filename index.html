@@ -7,7 +7,7 @@
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- XLSX (import excel) -->
+  <!-- Excel reader -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 
@@ -15,11 +15,13 @@
 
 <h2>🏥 Hospital Check-in System</h2>
 
+<!-- IMPORT -->
 <div class="import-box">
   <input type="file" id="fileInput" />
   <button onclick="importExcel()">Import Excel</button>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboard">
   <div class="card">
     <h3>Total</h3>
@@ -35,6 +37,7 @@
   </div>
 </div>
 
+<!-- TABLE -->
 <div class="table-container">
   <table id="customerTable">
     <thead>

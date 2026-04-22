@@ -1,12 +1,7 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyHIgN4L32DR6_eviNkKHW8ZuBZ2UvJSyDlpbFaUpK7Cy1QjD4JKlpD8PB2u2-tsntueQ/exec";
 
 let customers = [];
-/*GenID*/
-if (!data[i][0]) {
-  const id = Date.now();
-  sheet.getRange(i + 1, 1).setValue(id);
-  data[i][0] = id;
-}
+
 /* LOAD DATA */
 async function loadData() {
   const res = await fetch(API_URL);

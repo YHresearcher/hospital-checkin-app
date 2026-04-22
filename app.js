@@ -123,3 +123,23 @@ function updateDashboard() {
 }
 
 loadData();
+
+/*Highlight dòng đang xử lý*/
+row.style.transition = "0.2s";
+
+/*Disable khi đang save*/
+async function update(i, field, value) {
+  customers[i][field] = value;
+
+  document.body.style.cursor = "wait";
+
+  await save(customers[i]);
+
+  document.body.style.cursor = "default";
+
+  render();
+}
+
+/*Sort khách chưa hoàn tất lên đầu*/
+customers.sort((a, b) => isDone(a) - isDone(b));
+

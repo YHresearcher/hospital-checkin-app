@@ -35,12 +35,14 @@ function isDone(c) {
 
 /* AUTO SAVE */
 async function save(c) {
+  const formData = new URLSearchParams();
+
+  formData.append("data", JSON.stringify(c));
+
   await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(c)
+    mode: "no-cors",   // 🔥 bắt buộc
+    body: formData     // 🔥 KHÔNG dùng JSON trực tiếp nữa
   });
 }
 

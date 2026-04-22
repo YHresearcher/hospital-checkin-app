@@ -2,24 +2,48 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxfkfoT8PBmvOJP2xQSwY3c
 
 let customers = [];
 
+/* =========================
+   LOAD DATA
+========================= */
 async function loadData() {
-  const res = await fetch(API_URL);
-  const data = await res.json();
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
 
-  customers = data.slice(1).map(row => ({
-    id: row[0],
-    name: row[1],
-    passport: row[2] === true,
-    photo: row[3] === true,
-    workPermit: row[4] === true,
-    scan: row[5] === true,
-    checkout: row[6] === true,
-    signed: row[7] === true
-  }));
+    customers = data.slice(1).map(row => ({
+      id: row[0],
+      name: row[1],
+      passport: row[2] === true,
+      photo: row[3] === true,
+      workPermit: row[4] === true,
+      scan: row[5] === true,
+      checkout: row[6] === true,
+      signed: row[7] === true
+    }));
 
-  renderTable();
+    renderTable();
+  } catch (err) {
+    console.error("Load error:", err);
+  }
 }
 
+/* =========================
+   CHECK COMPLETED
+========================= */
+function isCompleted(c) {
+  return (
+    c.passport &&
+    c.photo &&
+    c.workPermit &&
+    c.scan &&
+    c.checkout &&
+    c.signed
+  );
+}
+
+/* =========================
+   RENDER TABLE
+========================= */
 function renderTable() {
   const tbody = document.querySelector("#customerTable tbody");
   tbody.innerHTML = "";
@@ -27,54 +51,72 @@ function renderTable() {
   customers.forEach((c, index) => {
     const row = document.createElement("tr");
 
+    const statusClass = isCompleted(c) ? "done" : "pending";
+
     row.innerHTML = `
-      <td>${c.name}</td>
-      <td><input type="checkbox" ${c.passport ? "checked" : ""} onchange="update(${index}, 'passport', this.checked)"></td>
-      <td><input type="checkbox" ${c.photo ? "checked" : ""} onchange="update(${index}, 'photo', this.checked)"></td>
-      <td><input type="checkbox" ${c.workPermit ? "checked" : ""} onchange="update(${index}, 'workPermit', this.checked)"></td>
-      <td><input type="checkbox" ${c.scan ? "checked" : ""} onchange="update(${index}, 'scan', this.checked)"></td>
-      <td><input type="checkbox" ${c.checkout ? "checked" : ""} onchange="update(${index}, 'checkout', this.checked)"></td>
-      <td><input type="checkbox" ${c.signed ? "checked" : ""} onchange="update(${index}, 'signed', this.checked)"></td>
-      <td><button onclick="submitRow(${index})">Submit</button></td>
+      <td class="${statusClass}">${c.name}</td>
+      <td><input type="checkbox" ${c.passport ? "checked" : ""} onchange="updateAndSave(${index}, 'passport', this.checked)"></td>
+      <td><input type="checkbox" ${c.photo ? "checked" : ""} onchange="updateAndSave(${index}, 'photo', this.checked)"></td>
+      <td><input type="checkbox" ${c.workPermit ? "checked" : ""} onchange="updateAndSave(${index}, 'workPermit', this.checked)"></td>
+      <td><input type="checkbox" ${c.scan ? "checked" : ""} onchange="updateAndSave(${index}, 'scan', this.checked)"></td>
+      <td><input type="checkbox" ${c.checkout ? "checked" : ""} onchange="updateAndSave(${index}, 'checkout', this.checked)"></td>
+      <td><input type="checkbox" ${c.signed ? "checked" : ""} onchange="updateAndSave(${index}, 'signed', this.checked)"></td>
+      <td>${isCompleted(c) ? "✅" : "⏳"}</td>
     `;
 
     tbody.appendChild(row);
   });
+
+  updateDashboard();
 }
 
-function update(index, field, value) {
+/* =========================
+   UPDATE + AUTO SAVE
+========================= */
+function updateAndSave(index, field, value) {
   customers[index][field] = value;
+
+  // Save ngay
+  sendToServer(customers[index]);
+
+  // Render lại UI
+  renderTable();
 }
 
-function submitRow(index) {
-  const c = customers[index];
-
-  const fields = [
-    { key: "passport", label: "Passport" },
-    { key: "photo", label: "Photo" },
-    { key: "workPermit", label: "Work Permit" },
-    { key: "scan", label: "Scan" },
-    { key: "checkout", label: "Checkout" },
-    { key: "signed", label: "Signed" }
-  ];
-
-  for (let f of fields) {
-    if (!c[f.key]) {
-      alert(`❌ ${f.label} chưa hoàn tất - Khách: ${c.name}`);
-      return;
-    }
-  }
-
-  sendToServer(c);
-}
-
+/* =========================
+   SEND TO SERVER
+========================= */
 async function sendToServer(customer) {
-  await fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(customer)
-  });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(customer)
+    });
 
-  alert("✅ Completed!");
+    const text = await res.text();
+    console.log(`Saved ${customer.name}:`, text);
+  } catch (err) {
+    console.error("Save error:", err);
+  }
 }
 
+/* =========================
+   DASHBOARD
+========================= */
+function updateDashboard() {
+  const total = customers.length;
+  const done = customers.filter(c => isCompleted(c)).length;
+  const pending = total - done;
+
+  document.getElementById("total").innerText = total;
+  document.getElementById("done").innerText = done;
+  document.getElementById("pending").innerText = pending;
+}
+
+/* =========================
+   INIT
+========================= */
 loadData();

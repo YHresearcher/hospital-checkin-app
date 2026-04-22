@@ -33,6 +33,12 @@ async function importExcel() {
   reader.readAsArrayBuffer(file);
 }
 
+/*Sent data to Sheets*/
+async function sendToSheet(data) {
+  const url = API_URL + "?import=" + encodeURIComponent(JSON.stringify(data));
+  await fetch(url);
+}
+
 /* LOAD DATA */
 async function loadData() {
   const res = await fetch(API_URL);

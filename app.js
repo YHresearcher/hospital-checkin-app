@@ -2,6 +2,37 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyHIgN4L32DR6_eviNkKHW8
 
 let customers = [];
 
+/*Import Excels*/
+async function importExcel() {
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) {
+    alert("Chọn file trước");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function (e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: "array" });
+
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+
+    const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+    console.log("Excel data:", jsonData);
+
+    // gửi lên Google Sheet
+    await sendToSheet(jsonData);
+
+    alert("Import xong!");
+    loadData(); // reload lại bảng
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
 /* LOAD DATA */
 async function loadData() {
   const res = await fetch(API_URL);

@@ -1,4 +1,4 @@
-const API_URL = "YOUR_GOOGLE_SCRIPT_URL";
+const API_URL = "https://script.google.com/macros/s/AKfycbxfkfoT8PBmvOJP2xQSwY3ca35kxN9VS_rKpjDZAqEZO0FLmmR31jR_BIRU_a-MNeyaWg/exec";
 
 let customers = [];
 

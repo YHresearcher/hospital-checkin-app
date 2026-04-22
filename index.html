@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Check-in System</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -14,7 +15,10 @@
   <p>Done: <span id="done"></span></p>
   <p>Pending: <span id="pending"></span></p>
 </div>
-
+  
+<input type="file" id="fileInput" />
+<button onclick="importExcel()">Import Excel</button>
+  
 <table id="customerTable">
   <thead>
     <tr>

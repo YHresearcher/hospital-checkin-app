@@ -35,15 +35,9 @@ function isDone(c) {
 
 /* AUTO SAVE */
 async function save(c) {
-  const formData = new URLSearchParams();
+  const url = API_URL + "?data=" + encodeURIComponent(JSON.stringify(c));
 
-  formData.append("data", JSON.stringify(c));
-
-  await fetch(API_URL, {
-    method: "POST",
-    mode: "no-cors",   // 🔥 bắt buộc
-    body: formData     // 🔥 KHÔNG dùng JSON trực tiếp nữa
-  });
+  await fetch(url);  // 🔥 chỉ GET, KHÔNG POST
 }
 
 /* UPDATE */
